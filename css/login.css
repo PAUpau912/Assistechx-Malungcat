@@ -1,0 +1,422 @@
+
+/* Styles for error and success messages */
+.alert {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Ensure both forms are styled */
+.form-box.register {
+    visibility: hidden;
+    opacity: 0;
+    z-index: 1;
+    animation: fadeOut 10ms ease-in forwards;
+}
+
+.container.active .form-box.register {
+    visibility: visible;
+    opacity: 1;
+    animation: fadeIn 2s ease-in forwards;
+    z-index: 1;
+}
+
+/* Adjusting toggle buttons for smooth transitions */
+.toggle-panel .admin-btn,
+.toggle-panel .login-btn {
+    cursor: pointer;
+}
+
+/* General form button hover effects */
+.btn:hover {
+    box-shadow: 0 0 5px #00c3cc, 0 0 20px #3372e3, 0 0 40px #7426ef;
+    color: #7426ef;
+    transform: scale(1.05);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins: wght@300;400; 500; 600; 700; 800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins','san-serif';
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url("../assets/background.png");
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.wrapper {
+    position: absolute;
+    border-radius: 50px;
+    overflow: visible; 
+}
+
+.wrapper::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(45deg, #00c3cc, #3372e3, #7426ef);
+    filter: blur(40px);
+    border-radius: 50px;
+}
+
+.container {
+    position: relative;
+    width: 850px;
+    height: 550px;
+    background:#ffffff;
+    border-radius: 50px;
+    margin: 20px;
+    overflow: hidden;
+    
+}
+
+.form-box {
+    position: absolute;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    color: #000000;
+    text-align: center;
+    padding: 40px;
+    transition: 2s;
+}
+
+.container.active .form-box {
+    right: 50%;
+}
+
+.form-box.admin {
+    visibility: hidden;
+    opacity: 1;
+    animation: fadeOut 10ms ease-in forwards;
+}
+
+.container.active .form-box.admin {
+    visibility: visible;
+    opacity: 0;
+    animation: fadeIn 2s ease-in forwards;
+    z-index: 1;
+}
+
+.form-box.login{
+    visibility: visible;
+    opacity: 0;
+    animation: fadeIn 2s ease-in forwards;
+    z-index: 1;
+}
+
+@keyframes fadeIn {
+    from {
+      opacity: 0; 
+    }
+    to {
+      opacity: 1; 
+    }
+  }
+
+.container.active .form-box.login {
+    visibility: hidden;
+    opacity: 1;
+    animation: fadeOut 10ms ease-in forwards;
+}
+
+@keyframes fadeOut {
+    from {
+      opacity: 1; 
+    }
+    to {
+      opacity: 0; 
+    }
+  }
+
+form {
+    width: 100%;
+}
+
+.container h1 {
+    font-size: 36px;
+    margin: -10px 0 ;
+}
+
+
+.input-box {
+    position: relative; 
+    margin: 30px 0;
+}
+
+.input-box input {
+    position: relative;
+    pointer-events: auto;
+    width: 100%;
+    padding: 13px 50px 13px 20px;
+    border-radius: 8px;
+    background: #ffffff;
+    border: 2px solid #000000;
+    outline: none;
+    font-size: 16px;
+    color: #000000;
+    font-weight: 500;
+    z-index: 10;
+    transition: border-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    z-index: 10;
+}
+
+.input-box input::placeholder { 
+    color: #404040;
+    font-weight: 400;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+input:focus::placeholder {
+    transition: color 0.3s ease, transform 0.3s ease;
+    transform: translateY(-15px);
+    color: #3372e3;
+    font-size: 75%;
+}
+
+input:focus {
+    border-color: #2235b0;
+}
+
+.input-box i{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #000000;
+    z-index: 10;
+}
+
+input:focus + i {
+    color: #2235b0;
+}
+
+.forgot-link {
+    margin: 15px 0 15px;
+    z-index: 10;
+}
+
+.forgot-link a {
+    font-size: 14.5px;
+    color: #000000;
+    text-decoration: none;
+    z-index: 10;
+}
+
+.forgot-link a:hover {
+    font-size: 14.5px;
+    color: #eb00ad;
+    text-decoration: underline;
+    z-index: 10;
+}
+
+.btn {
+    position: relative;
+    width: 100%;
+    height: 48px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,.5);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #000000;
+    font-weight: 600;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.btn:hover {
+    box-shadow: 0 0 5px #00c3cc, 0 0 20px #3372e3, 0 0 40px #7426ef;
+    color: #7426ef;
+    transform: scale(1.05);
+    border-color: #7426ef;
+  }
+
+.toggle-box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    Z-index: 0; /* to make it behind the form-box */
+}
+
+
+.styled-image {
+    position: absolute;
+    top: 10px;
+    width: 250px;
+    height: auto;
+    margin-top: 20px;
+}
+
+.toggle-box::before {
+    content: '';
+    position: absolute;
+    left: -250%;
+    width: 300%;
+    height: 100%;
+    background: #000000;
+    border-radius: 150px;
+    transition: 1.9s ease-in-out;
+    z-index: -1; /* to make it behind the form-box */
+}
+
+.container.active .toggle-box::before {
+    left: 50%;
+}
+
+.toggle-panel {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: 0.6s ease-in-out;
+    z-index: 0;
+}
+
+.toggle-panel.toggle-left h1{
+    margin-top: 80px;
+}
+
+.toggle-panel.toggle-left {
+    left: 0;
+    transition-delay: 1.2s;
+}
+
+.container.active .toggle-panel.toggle-left {
+    left: -50%;
+    transition-delay: 0.6s ;
+} 
+
+.toggle-panel.toggle-right{
+    right: -50%;
+    transition-delay: 0.6s;
+}
+
+.container.active .toggle-panel.toggle-right {
+    right: 0;
+    transition-delay: 1.2s ;
+}
+
+.toggle-panel.toggle-right h1{
+    margin-top: 80px;
+}
+
+.toggle-panel p {
+    position: absolute;
+    font-size: 15px;
+    margin-top: 150px;
+    justify-content: center;
+    align-items: center;
+}
+
+.toggle-panel .btn{
+    position: relative;
+    font-size: small;
+    color: #ffffff;
+    width: 120px;
+    height: 40px;
+    background: transparent;
+    border: 3px solid #ffffff;
+    margin-top: 100px;
+}
+
+@media screen and (max-width: 650px) {
+    .container{
+        height: calc(100vh - 40px);
+    }
+
+    .form-box {
+        bottom: 0;
+        width: 100%;
+        height: 70%;
+    }
+
+    .container.active .form-box {
+        right: 0;
+        bottom: 30%;
+    }
+
+    .toggle-box::before {
+        left: 0;
+        top: -270%;
+        width: 100%;
+        height: 300%;
+        border-radius: 20vw;
+    }
+
+    .container.active .toggle-box::before {
+        left: 0;
+        top: 70%;
+    }
+
+    .toggle-panel{
+        width: 100%;
+        height: 30%;
+    }
+
+    .toggle-panel.toggle-left{
+        top: 0;
+    }
+
+    .container.active .toggle-panel.toggle-left{
+        left: 0;
+        top: -30px;
+    }
+
+    .toggle-panel.toggle-right{
+        right: 0;
+        bottom: 30%;
+    }
+
+    .container.active .toggle-panel.toggle-right{
+        bottom: 0;
+    }
+
+}
+
+@media screen and (max-width: 400px) {
+
+    .form-box {
+        padding: 20px
+    }
+
+    .toggle-panel h1 {
+        font-size: 30px;
+    }
+}
