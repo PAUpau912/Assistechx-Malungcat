@@ -116,9 +116,24 @@
                         <div class="col-sm-8">
                             <select name="team" class="form-control">
                                 <option>--select--</option>
-                                <?php foreach($teams as $team):?>
-                                <option value="<?php echo $team->id?>"> <?php echo $team->name?></option>
-                                <?php endforeach?>
+                                <option value="Administration">Administration</option>
+                                <option value="Operations">Operations</option>
+                                <option value="Data Analysis">Data Analysis</option>
+                                <option value="Project Management">Project Management</option>
+                                <option value="Cloud Computing">Cloud Computing</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="Technical Support">Technical Support</option>
+                                <option value="Security">Security</option>
+                                <option value="Finance">Finance</option>
+                                <option value="IT">IT</option>
+                                <option value="Software Development">Software Development</option>
+                                <option value="Legal">Legal</option>
+                                <option value="Procurement">Procurement</option>
+                                <option value="Research and Development">Research and Development</option>
+                                <option value="Customer Service">Customer Service</option>
+                                <option value="Sales">Sales</option>
+                                <option value="Human Resources">Human Resources</option>
+                                <option value="Marketing">Marketing</option>
                             </select>
                         </div>
                     </div>

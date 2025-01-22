@@ -1,7 +1,6 @@
 <?php
-// Authentication Logic
+// Forgot Password Logic
 session_start();
-$_SESSION['logged-in'] = false;
 
 require_once './src/Database.php';
 $db = Database::getInstance();
@@ -10,72 +9,41 @@ $err = '';
 $success = '';
 
 if (isset($_POST['submit'])) {
-    // Login logic
+    // Forgot password logic
     $email = $_POST['email'];
-    $password = $_POST['password'];
 
     if (strlen($email) < 1) {
         $err = 'Please enter email address';
     } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $err = 'Please enter a valid email address';
-    } else if (strlen($password) < 1) {
-        $err = "Please enter your password";
     } else {
-        $sql = "SELECT id, name, email, password, role FROM users WHERE email = '$email'";
+        $sql = "SELECT id, email FROM users WHERE email = '$email'";
         $res = $db->query($sql);
 
         if ($res->num_rows < 1) {
-            $err = "No user found";
+            $err = "No user found with this email";
         } else {
-            $user = $res->fetch_object();
+            // Generate reset token and save to database
+            $reset_token = bin2hex(random_bytes(16)); // Secure token
+            $expires_at = date('l, F j, Y g:i A', strtotime('+1 hour')); // Token expires in 1 hour
 
-            if (password_verify($password, $user->password)) {
-                $_SESSION['logged-in'] = true;
-                $_SESSION['user'] = $user;
-                
-                // Redirect based on user role
-                if ($user->role == 'admin') {
-                    header('Location: ./dashboard.php');
-                } 
-                
-                elseif ($user->role == 'staff') {
-                    header('Location: ./dashboard.php');
+            $update_sql = "UPDATE users SET reset_token = '$reset_token', reset_token_expires = '$expires_at' WHERE email = '$email'";
+            if ($db->query($update_sql)) {
+                // Send reset email
+                $reset_link = "http://localhost/reset_password.php?token=$reset_token";
+                $to = $email;
+                $subject = "Password Reset Request";
+                $message = "Click the link below to reset your password:\n$reset_link";
+                $headers = "From: no-reply@assistechx.com";
+
+                if (mail($to, $subject, $message, $headers)) {
+                    $success = "A reset link has been sent to your email address.";
+                } else {
+                    $err = "Failed to send email. Please try again.";
                 }
-                
-                else {
-                    header('Location: ./user_dashboard.php');
-                }
-                exit();
             } else {
-                $err = "Wrong username or password";
+                $err = "Failed to generate reset link: " . $db->error;
             }
-        }
-    }
-} elseif (isset($_POST['register'])) {
-    // Registration logic
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
-
-    if (strlen($name) < 1) {
-        $err = 'Please enter your name';
-    } else if (strlen($email) < 1) {
-        $err = 'Please enter email address';
-    } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $err = 'Please enter a valid email address';
-    } else if (strlen($password) < 6) {
-        $err = "Password must be at least 6 characters long";
-    } else if ($password !== $confirm_password) {
-        $err = "Passwords do not match";
-    } else {
-        $password_hash = password_hash($password, PASSWORD_BCRYPT);
-        $sql = "INSERT INTO users (name, email, password) VALUES ('$name', '$email', '$password_hash')";
-
-        if ($db->query($sql)) {
-            $success = "Registration successful! Please log in.";
-        } else {
-            $err = "Registration failed: " . $db->error;
         }
     }
 }
@@ -88,7 +56,7 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>AssisTechX</title>
+    <title>Forgot Password | AssisTechX</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./css/login.css">
 </head>
@@ -99,19 +67,14 @@ if (isset($_POST['submit'])) {
     <div class="container">
         <div class="form-box login">
             <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                <h1>Login</h1>
+                <h1>Forgot Password</h1>
 
                 <div class="input-box">
-                    <input type="text" name="email" placeholder="Email address" required>
-                    <i class='bx bxs-user'></i>
+                    <input type="text" name="email" placeholder="Enter your registered email" required>
+                    <i class='bx bxs-envelope'></i>
                 </div>
 
-                <div class="input-box">
-                    <input type="password" name="password" placeholder="Password" required>
-                    <i class='bx bxs-lock-alt'></i>
-                </div>
-
-                <button type="submit" name="submit" class="btn">Login</button>
+                <button type="submit" name="submit" class="btn">Send Reset Link</button>
                 <p></p>
 
                 <?php if (strlen($err) > 1) : ?>
@@ -127,11 +90,10 @@ if (isset($_POST['submit'])) {
                 <?php endif; ?>
 
                 <div class="forgot-link">
-                    <a href="forgot_password.php">Forgot password?</a>
+                    <a href="index.php">Back to Login</a>
                 </div>
             </form>
         </div>
-
         <div class="form-box register">
             <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <h1>Register</h1>

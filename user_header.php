@@ -78,6 +78,5 @@ $db = Database::getInstance();
     </ul>
 
   </nav>
-
 </body>
 </html>

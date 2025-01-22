@@ -36,6 +36,7 @@ if (isset($_GET['del'])) {
                 <tr>
                   <th>Subject</th>
                   <th>Requester</th>
+                  <th>Department</th>
                   <th>Created At</th>
                   <th>Action</th>
                 </tr>
@@ -50,6 +51,7 @@ if (isset($_GET['del'])) {
                       echo $requester ? $requester->name : 'Unknown'; 
                     ?>
                   </td>
+                  <td><?php echo $ticket->department?></td>
                   <?php $date = new DateTime($ticket->created_at)?>
                   <td><?php echo $date->format('l, F j, Y g:i A')?> </td>
                   <td width="100px">
@@ -60,7 +62,7 @@ if (isset($_GET['del'])) {
                           Action
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                          <a href="./ticket-details.php?id=<?php echo $ticket->id?>" class="dropdown-item" href="#">View</a>
+                          <a href="./user_view.php?id=<?php echo $ticket->id?>" class="dropdown-item" href="#">View</a>
                           <a class="dropdown-item" onclick="return confirm('Are you sure to delete')"
                             href="?del=<?php echo $ticket->id; ?>">Delete</a>
                         </div>

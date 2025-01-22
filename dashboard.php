@@ -26,17 +26,18 @@
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered table-sm" id="dataTable" width="100%" cellspacing="0">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Subject</th>
-                <th>Requester</th>
-                <th>Team</th>
-                <th>Agent</th>
-                <th>Created At</th>
-                <th>Action</th>
-              </tr>
-            </thead>
+          <thead>
+            <tr>
+              <th style="width: 5%;">ID</th>
+              <th style="width: 20%;">Subject</th>
+              <th style="width: 15%;">Requester</th>
+              <th style="width: 20%;">Team</th>
+              <th style="width: 15%;">Agent</th>
+              <th style="width: 15%;">Created At</th>
+              <th style="width: 10%;">Action</th>
+            </tr>
+          </thead>
+
             <tbody>
               <?php foreach($allTicket as $ticket):?>
               <tr>

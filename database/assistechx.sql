@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 21, 2025 at 07:14 AM
+-- Generation Time: Jan 22, 2025 at 05:13 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -202,7 +202,7 @@ CREATE TABLE `ticket` (
   `team_member` varchar(11) DEFAULT NULL,
   `status` varchar(20) NOT NULL DEFAULT 'open',
   `priority` varchar(20) NOT NULL DEFAULT 'low',
-  `rating` int(11) NOT NULL DEFAULT 0,
+  `department` varchar(150) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` varchar(50) DEFAULT NULL,
   `deleted_at` varchar(50) DEFAULT NULL,
@@ -213,29 +213,32 @@ CREATE TABLE `ticket` (
 -- Dumping data for table `ticket`
 --
 
-INSERT INTO `ticket` (`id`, `title`, `body`, `requester`, `team`, `team_member`, `status`, `priority`, `rating`, `created_at`, `updated_at`, `deleted_at`, `reported`) VALUES
-(1, 'subject', 'this', 20, 2, '1', 'closed', 'low', 0, '2019-05-19 13:48:31', NULL, NULL, 1),
-(2, 'subject', 'this ', 2, 2, '2', 'solved', 'low', 0, '2019-05-19 13:48:37', NULL, NULL, 0),
-(3, 'test', 'this is a comment', 9, 2, '4', 'open', 'low', 0, '2019-05-23 17:18:25', NULL, NULL, 1),
-(4, 'test', 'comment', 15, 1, '3', 'pending', 'high', 0, '2019-05-30 13:55:17', NULL, NULL, 0),
-(5, 'abcd', 'no comment', 6, 3, '7', 'open', 'low', 0, '2019-06-07 02:07:43', NULL, NULL, 1),
-(6, 'abcd', 'abcd', 7, 1, '9', 'open', 'low', 0, '2019-06-07 06:51:33', NULL, NULL, 1),
-(7, 'no subject', 'abcd', 10, 1, '5', 'open', 'high', 0, '2019-06-07 06:52:04', NULL, NULL, 0),
-(8, 'demo subject', 'system debugging', 8, 2, '9', 'closed', 'low', 0, '2023-03-20 06:57:25', NULL, NULL, 0),
-(9, 'demo subject', 'demo comment', 17, 1, '8', 'solved', 'medium', 0, '2023-03-20 11:11:23', NULL, NULL, 0),
-(10, 'computer', '<p>computer is broken</p>', 8, 3, '2', 'open', 'low', 0, '2025-01-17 09:29:34', NULL, NULL, 0),
-(11, 'computer', 'lkjhuyty', 4, 1, '5', 'open', 'low', 0, '2025-01-17 11:19:23', NULL, NULL, 0),
-(12, 'test', 'this is a comment', 18, 2, '6', 'open', 'low', 0, '2025-01-17 14:19:29', NULL, NULL, 0),
-(13, 'test', 'this is a comment', 12, 2, '8', 'open', 'low', 0, '2025-01-17 14:19:34', NULL, NULL, 0),
-(14, 'test', 'this is a comment', 16, 2, '4', 'open', 'low', 0, '2025-01-17 14:20:10', NULL, NULL, 0),
-(15, 'test', 'this is a comment', 15, 2, '4', 'open', 'low', 0, '2025-01-17 14:33:35', NULL, NULL, 0),
-(16, 'test', 'this is a comment', 12, 2, '4', 'open', 'low', 0, '2025-01-17 14:33:47', NULL, NULL, 0),
-(17, 'test', 'this is a comment', 6, 2, '4', 'open', 'low', 0, '2025-01-17 15:40:46', NULL, NULL, 0),
-(18, 'test', 'this is a comment', 3, 2, '4', 'open', 'low', 0, '2025-01-17 15:42:41', NULL, NULL, 0),
-(19, 'computer', 'COMPUTER', 4, 8, '5', 'open', 'low', 0, '2025-01-17 16:27:38', NULL, NULL, 0),
-(20, 'computer', 'COMPUTER', 4, 8, '8', 'open', 'low', 0, '2025-01-17 18:43:17', NULL, NULL, 0),
-(21, 'computer', 'system issues', 4, 8, '4', 'open', 'low', 0, '2025-01-18 03:16:55', NULL, NULL, 0),
-(22, 'computer', 'network issues', 4, 8, '3', 'open', 'low', 0, '2025-01-19 16:43:54', NULL, NULL, 0);
+INSERT INTO `ticket` (`id`, `title`, `body`, `requester`, `team`, `team_member`, `status`, `priority`, `department`, `created_at`, `updated_at`, `deleted_at`, `reported`) VALUES
+(1, 'subject', 'this', 20, 2, '1', 'closed', 'low', 'Finance', '2019-05-19 13:48:31', NULL, NULL, 1),
+(2, 'subject', 'this ', 2, 2, '2', 'solved', 'low', 'Marketing', '2019-05-19 13:48:37', NULL, NULL, 0),
+(3, 'test', 'this is a comment', 9, 2, '4', 'open', 'low', 'Sales', '2019-05-23 17:18:25', NULL, NULL, 1),
+(4, 'test', 'comment', 15, 1, '3', 'pending', 'high', 'Web Development', '2019-05-30 13:55:17', NULL, NULL, 0),
+(5, 'abcd', 'no comment', 6, 3, '7', 'open', 'low', 'Security', '2019-06-07 02:07:43', NULL, NULL, 1),
+(6, 'abcd', 'abcd', 7, 1, '9', 'open', 'low', 'Technical Support', '2019-06-07 06:51:33', NULL, NULL, 1),
+(7, 'no subject', 'abcd', 10, 1, '5', 'open', 'high', 'Legal', '2019-06-07 06:52:04', NULL, NULL, 0),
+(8, 'demo subject', 'system debugging', 8, 2, '9', 'closed', 'low', 'Software Development', '2023-03-20 06:57:25', NULL, NULL, 0),
+(9, 'demo subject', 'demo comment', 17, 1, '8', 'solved', 'medium', 'Procurement', '2023-03-20 11:11:23', NULL, NULL, 0),
+(10, 'computer', '<p>computer is broken</p>', 8, 3, '2', 'open', 'low', 'Human Resource', '2025-01-17 09:29:34', NULL, NULL, 0),
+(11, 'computer', 'lkjhuyty', 4, 1, '5', 'open', 'low', 'Customer Service', '2025-01-17 11:19:23', NULL, NULL, 0),
+(12, 'test', 'this is a comment', 18, 2, '6', 'open', 'low', 'Cloud Computing', '2025-01-17 14:19:29', NULL, NULL, 0),
+(13, 'test', 'this is a comment', 12, 2, '', 'open', 'low', '0', '2025-01-17 14:19:34', NULL, NULL, 0),
+(14, 'test', 'this is a comment', 16, 2, '4', 'open', 'low', 'Finance', '2025-01-17 14:20:10', NULL, NULL, 0),
+(15, 'test', 'this is a comment', 15, 2, '4', 'open', 'low', 'Sales', '2025-01-17 14:33:35', NULL, NULL, 0),
+(16, 'test', 'this is a comment', 12, 2, '4', 'open', 'low', 'Legal', '2025-01-17 14:33:47', NULL, NULL, 0),
+(17, 'test', 'this is a comment', 6, 2, '4', 'open', 'low', 'Customer Service', '2025-01-17 15:40:46', NULL, NULL, 0),
+(18, 'test', 'this is a comment', 3, 2, '4', 'open', 'low', 'Marketing', '2025-01-17 15:42:41', NULL, NULL, 0),
+(19, 'computer', 'COMPUTER', 4, 8, '5', 'open', 'low', 'Operations', '2025-01-17 16:27:38', NULL, NULL, 0),
+(20, 'computer', 'COMPUTER', 4, 8, '8', 'open', 'low', 'Human Resource', '2025-01-17 18:43:17', NULL, NULL, 0),
+(21, 'computer', 'system issues', 4, 8, '4', 'open', 'low', 'IT', '2025-01-18 03:16:55', NULL, NULL, 0),
+(22, 'computer', 'network issues', 4, 8, '3', 'open', 'low', 'Procurement', '2025-01-19 16:43:54', NULL, NULL, 0),
+(25, 'computer', 'computer issues', 5, 17, '5', 'open', 'low', 'Legal', '2025-01-21 07:53:16', NULL, NULL, 0),
+(26, 'printer issue', '<p>no blue ink</p>', 5, 0, '', 'open', 'low', 'Administration', '2025-01-21 09:08:03', NULL, NULL, 0),
+(27, 'printer issue', '<p>inless</p>\r\n<p>&nbsp;</p>', 5, 3, '', 'open', 'low', 'Software Development', '2025-01-21 09:12:06', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -267,7 +270,10 @@ INSERT INTO `ticket_event` (`id`, `ticket`, `user`, `body`, `created_at`, `updat
 (8, 11, 1, 'Ticket created', '2023-03-20 11:11:23', '2023-03-20 11:11:23'),
 (9, 12, 1, 'Ticket created', '2025-01-17 09:29:34', '2025-01-17 09:29:34'),
 (10, 13, 4, 'Ticket created', '2025-01-17 11:19:23', '2025-01-17 11:19:23'),
-(11, 21, 4, 'Ticket created', '2025-01-17 16:27:38', '2025-01-17 16:27:38');
+(11, 21, 4, 'Ticket created', '2025-01-17 16:27:38', '2025-01-17 16:27:38'),
+(12, 25, 5, 'Ticket created', '2025-01-21 07:53:16', '2025-01-21 07:53:16'),
+(13, 26, 5, 'Ticket created', '2025-01-21 09:08:03', '2025-01-21 09:08:03'),
+(14, 27, 5, 'Ticket created', '2025-01-21 09:12:06', '2025-01-21 09:12:06');
 
 -- --------------------------------------------------------
 
@@ -282,21 +288,22 @@ CREATE TABLE `users` (
   `phone` varchar(20) NOT NULL,
   `password` varchar(256) NOT NULL,
   `role` varchar(20) NOT NULL DEFAULT 'member',
-  `avatar` varchar(150) DEFAULT NULL,
+  `reset_token` varchar(150) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
   `last_password` varchar(256) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
+  `updated_at` timestamp NULL DEFAULT current_timestamp(),
+  `reset_token_expires` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `phone`, `password`, `role`, `avatar`, `last_password`, `created_at`, `updated_at`) VALUES
-(1, 'John Doe', 'johndoe@helpdesk.com', '8888888888', '$2y$10$PHXjdcPjksokkGryfqK.WePBgiQB30Gw.ytYBHdmGtqtoGtVHtAm.', 'admin', NULL, '$2y$10$PHXjdcPjksokkGryfqK.WePBgiQB30Gw.ytYBHdmGtqtoGtVHtAm.', '2023-03-20 07:16:20', '2019-05-19 09:01:34'),
-(2, 'injamul ', 'johndoe@helpdesk.com', '1234567899', '$2y$10$6N4gbdypYQvRkU2ke9Q1f.Gm4fcGY/PEpv2rSB77wiSLZaOy8kq5i', 'user', NULL, '$2y$10$6N4gbdypYQvRkU2ke9Q1f.Gm4fcGY/PEpv2rSB77wiSLZaOy8kq5i', '2025-01-17 13:00:24', '2019-05-24 07:58:53'),
-(3, 'Alex', 'kangkan@email.com', '9999999999', '$2y$10$Q0rxoFO4fSrcdp58CO0RNOSDP7znVc9eGY6Z4xjQ8MTLHYhx0TF.6', 'staff', NULL, '$2y$10$Q0rxoFO4fSrcdp58CO0RNOSDP7znVc9eGY6Z4xjQ8MTLHYhx0TF.6', '2025-01-17 17:05:20', '2019-05-30 08:49:22'),
-(5, 'Angeline Piamonte', 'angelpiamonte@helpdesk.com', '', '$2y$10$FjfHZYLhgWsLM1cAXvDI3up3C6iQVRJDRltajP4XFnnQitUZSpKhC', 'member', NULL, '', '2025-01-21 05:58:04', '2025-01-21 05:57:40');
+INSERT INTO `users` (`id`, `name`, `email`, `phone`, `password`, `role`, `reset_token`, `last_password`, `created_at`, `updated_at`, `reset_token_expires`) VALUES
+(1, 'John Doe', 'johndoe@helpdesk.com', '8888888888', '$2y$10$PHXjdcPjksokkGryfqK.WePBgiQB30Gw.ytYBHdmGtqtoGtVHtAm.', 'admin', '', '$2y$10$PHXjdcPjksokkGryfqK.WePBgiQB30Gw.ytYBHdmGtqtoGtVHtAm.', '2023-03-20 07:16:20', '2019-05-19 09:01:34', NULL),
+(2, 'injamul ', 'johndoe@helpdesk.com', '1234567899', '$2y$10$6N4gbdypYQvRkU2ke9Q1f.Gm4fcGY/PEpv2rSB77wiSLZaOy8kq5i', 'user', '', '$2y$10$6N4gbdypYQvRkU2ke9Q1f.Gm4fcGY/PEpv2rSB77wiSLZaOy8kq5i', '2025-01-17 13:00:24', '2019-05-24 07:58:53', NULL),
+(3, 'Alex', 'kangkan@email.com', '9999999999', '$2y$10$Q0rxoFO4fSrcdp58CO0RNOSDP7znVc9eGY6Z4xjQ8MTLHYhx0TF.6', 'staff', '', '$2y$10$Q0rxoFO4fSrcdp58CO0RNOSDP7znVc9eGY6Z4xjQ8MTLHYhx0TF.6', '2025-01-17 17:05:20', '2019-05-30 08:49:22', NULL),
+(5, 'Angeline Piamonte', 'angelpiamonte@helpdesk.com', '', '$2y$10$FjfHZYLhgWsLM1cAXvDI3up3C6iQVRJDRltajP4XFnnQitUZSpKhC', 'user', '6839bc969a6866b19ef1625b87434d25', '', '2025-01-22 04:11:22', '2025-01-21 05:57:40', '0000-00-00 00:00:00');
 
 --
 -- Indexes for dumped tables
@@ -376,13 +383,13 @@ ALTER TABLE `team_member`
 -- AUTO_INCREMENT for table `ticket`
 --
 ALTER TABLE `ticket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `ticket_event`
 --
 ALTER TABLE `ticket_event`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`

@@ -134,18 +134,17 @@ if (isset($_POST['comment'])) {
                                 </select>
                             </div>
                         </div>
-                        
-                        <div class="text-center">
-                            <button class="btn btn-primary" type="submit" name="submit" >Assign</button>
+                    </div>
+                    <div class="form-group row col-lg-8 offset-lg-2 col-md-8 col-sm-12 offset-md-2">
+                        <label for="details" class="col-sm-12 col-lg-3 col-md-3 col-form-label">Details</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" name="details" readonly><?php echo $ticket->body; ?></textarea>
                         </div>
                     </div>
-                </form>
-                <div class="form-group row col-lg-8 offset-lg-2 col-md-8 col-sm-12 offset-md-2">
-                    <label for="details" class="col-sm-12 col-lg-3 col-md-3 col-form-label">Details</label>
-                    <div class="col-sm-8">
-                        <textarea class="form-control" name="details" readonly><?php echo $ticket->body; ?></textarea>
+                    <div class="text-center">
+                        <button class="btn btn-primary" type="submit" name="submit" >Assign</button>
                     </div>
-                </div>
+                </form>
 
             </div>
         </div>
