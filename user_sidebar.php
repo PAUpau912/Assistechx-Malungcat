@@ -20,4 +20,9 @@ $user = $_SESSION['user'];
       <span> Profile</span>
     </a>
   </li>
+  <li class = "nav-item">
+    <a class = "nav-link" href="user_general_terms.php">
+      <span>General Terms</span>
+    </a>
+  </li>
 </ul>

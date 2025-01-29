@@ -15,6 +15,17 @@ if (isset($_GET['del'])) {
         echo $e->getMessage();
     }
 }
+    // Get Status Button Color Style
+    function getStatusColor($status) {
+      $statusColors = [
+          'open' => 'background-color: blue ; color: white;',
+          'closed' => 'background-color: red; color: white;',
+          'solved' => 'background-color: green; color: white;',
+          'pending' => 'background-color: yellow; color: black;',
+      ];
+      
+      return $statusColors[$status] ?? 'background-color: #343a40; color: white;';  // Default black
+    }
 ?>
 <div id="wrapper">
   <!-- Sidebar -->
@@ -37,6 +48,7 @@ if (isset($_GET['del'])) {
                   <th>Subject</th>
                   <th>Requester</th>
                   <th>Department</th>
+                  <th>Status</th>
                   <th>Created At</th>
                   <th>Action</th>
                 </tr>
@@ -52,6 +64,11 @@ if (isset($_GET['del'])) {
                     ?>
                   </td>
                   <td><?php echo $ticket->department?></td>
+                  <td>
+                  <button class = "btn" style = "<?php echo getStatusColor($ticket->status);?>">
+                      <?php echo $ticket->status;?>
+                  </button>
+                </td>
                   <?php $date = new DateTime($ticket->created_at)?>
                   <td><?php echo $date->format('l, F j, Y g:i A')?> </td>
                   <td width="100px">

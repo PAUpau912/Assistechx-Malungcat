@@ -10,6 +10,7 @@ class Event{
 
     public $body = '';
 
+
     private $db = null;
 
 
@@ -19,6 +20,7 @@ class Event{
         $this->user = isset($data['user']) ? $data['user'] : null ;
         $this->body = isset($data['body']) ? $data['body'] : null ;
 
+
         $this->db = Database::getInstance();
 
         return $this;
@@ -26,7 +28,7 @@ class Event{
 
     public function save() : Event 
     {
-        $sql = "INSERT INTO ticket_event (ticket, user,  body)
+        $sql = "INSERT INTO ticket_event (ticket, user, body)
                 VALUES ('$this->ticket', '$this->user', '$this->body');
         ";
         
@@ -90,6 +92,5 @@ class Event{
             $this->$key = $property;
         }
     }
-
-
+    
 }

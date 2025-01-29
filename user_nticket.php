@@ -5,6 +5,9 @@ require_once './src/ticket.php';
 require_once './src/ticket-event.php';
 require './src/helper-functions.php';
 
+$ticket = new Ticket();
+$userTickets = $ticket::findByUserId($_SESSION['user']->id);
+
 $err = '';
 $msg = '';
 
@@ -16,43 +19,52 @@ while($row = $res->fetch_object()){
     $teams[] = $row;
 }
 
-if(isset($_POST['submit'])){
-  
-    $subject = $_POST['subject'];
-    $comment = $_POST['comment']; 
-    $team = $_POST['team'];
-    $requester = $user->id; // Assuming $user is the currently logged-in user
+if (isset($_POST['submit'])) {
+    $comment = $_POST['comment'];
+    $image = null; // Store the image path if uploaded
 
-    if(strlen($subject) < 1){
-        $err = "Please enter title";
-    } else if(strlen($comment) < 1){
-        $err = "Please enter details";
-    } else if($team == 'none'){
-        $err = "Please select team";
+    // Handle the image upload
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed image types
+        if (in_array($_FILES['image']['type'], $allowedTypes)) {
+            $uploadDir = 'uploads/comments/'; // Directory to store images
+            $fileName = time() . '_' . $_FILES['image']['name'];
+            $filePath = $uploadDir . $fileName;
+
+            // Move the uploaded image to the directory
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $filePath)) {
+                $image = $filePath; // Save the file path
+            } else {
+                $err = "Failed to upload image.";
+            }
+        } else {
+            $err = "Only image files (JPEG, PNG, GIF) are allowed.";
+        }
+    }
+
+    // Validate the comment
+    if (strlen($comment) < 1) {
+        $err = "Please enter a comment";
     } else {
-      try{
-          $ticket = new Ticket([
-              'title' => $subject,
-              'body' => $comment,
-              'team' => $team,
-              'requester' => $requester
-          ]); 
-    
-          $savedTicket = $ticket->save();
+        try {
+            // Save the comment with the uploaded image (if any)
+            $commentObj = new Comment([
+                'comment_body' => $comment,
+                'ticket_id' => $ticket_id,  // Assuming you're saving it for a specific ticket
+                'user_id' => $user->id,     // Assuming $user is the logged-in user
+                'image_path' => $image,     // Save the image path here
+            ]);
 
-          $event = new Event([
-              'ticket' => $savedTicket->id, 
-              'user' => $user->id, 
-              'body' => 'Ticket created'
-          ]);
-          $event->save();
+            // Save the comment to the database
+            $savedComment = $commentObj->save();
 
-          $msg = "Ticket generated successfully";
-      } catch(Exception $e){
-          $err = "Failed to generate ticket";
-      }
+            $msg = "Comment posted successfully!";
+        } catch (Exception $e) {
+            $err = "Failed to post comment";
+        }
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -163,7 +175,7 @@ if(isset($_POST['submit'])){
                 <div class="alert alert-success text-center my-3" role="alert"> <strong>Success! </strong> <?php echo $msg;?></div>
                 <?php endif?>
 
-                <form method="POST" action="<?php echo $_SERVER['PHP_SELF']?>">
+                <form method="POST" action="<?php echo $_SERVER['PHP_SELF']?>" enctype="multipart/form-data">
                     <div class="form-group row col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-12">
                         <label for="requester" class="col-sm-12 col-lg-2 col-md-2 col-form-label">Requester</label>
                         <div class="col-sm-8">
@@ -211,7 +223,13 @@ if(isset($_POST['submit'])){
                                 <textarea name="comment" class="form-control" id="" placeholder="Enter details" rows="10" cols="50"></textarea>
                             </div>
                     </div>
-                    
+                    <!-- Upload Image Field -->
+                    <div class="form-group row col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-12">
+                        <label for="file" class="col-sm-12 col-lg-2 col-md-2 col-form-label">Upload Image (optional)</label>
+                        <div class="col-sm-8">
+                            <input type="file" name="image" class="form-control" id="file" accept="image/*">
+                        </div>
+                    </div>
                     <div class="text-center">
                         <button type="submit" name="submit" class="btn btn-lg btn-primary"> Create</button>
                     </div>

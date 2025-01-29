@@ -7,10 +7,6 @@
 
     $ticket = new Ticket();
 
-    if (isset($_GET['del'])) {
-        $ticket::delete($_GET['del']);
-    }
-
     $allTicket = $ticket::findByStatus('closed');
    // print_r($allTicket);die();
 
@@ -39,7 +35,7 @@
                                 <th>Requester</th>
                                 <th>Team</th>
                                 <th>Agent</th>
-                                <th>Status</th>
+                                <th>status</th>
                                 <th>Created At</th>
                                 <th>Action</th>
                             </tr>
@@ -50,11 +46,14 @@
                               <td><?php echo $ticket->id?></td>
                                 <td><a href="./ticket-details.php?id=<?php echo $ticket->id?>"><?php echo $ticket->title?></a></td>
                                 <td><?php echo $requester::find($ticket->requester)->name?></td>
-                                <td><?php echo $team::find($ticket->team)->department;?></td>
-                                <td><?php echo $team::find($ticket->team)->name ?? ' '; ; ?></td>
+                                <td><?php echo $team::find($ticket->team)->name;?></td>
+                                <?php $usr =  $user::find($ticket->team_member)->name ?? ' '; ; ?>
+                                <?php if($usr !== ''): ?>
+                                <td><?php echo $usr ?></td>
+<?php endif; ?>
                                 <td><button class= "btn btn-danger"><?php echo $ticket->status ?></button></td>
                                 <?php $date = new DateTime($ticket->created_at)?>
-                                <td><?php echo $date->format('l, F j, Y g:i A')?> </td>
+                                <td><?php echo $date->format('d-m-Y H:i:s')?> </td>
                                 <td width="100px">
                                     <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                         <div class="btn-group" role="group">
@@ -65,8 +64,10 @@
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                                 <a href="./ticket-details.php?id=<?php echo $ticket->id?>" class="dropdown-item" >View</a>
-                                                <a href="?del=<?php echo $ticket->id ?>" class="dropdown-item" onclick="return confirm('Are you sure to delete')">Delete</a>
-                                                <a class="dropdown-item" href="report_ticket.php?ticket_id=<?php echo $ticket->id; ?>">Report</a>
+                                                <form action="report_ticket.php" method="POST">
+                                                  <input type="hidden" name="ticket_id" value="<?php echo $ticket->id; ?>">
+                                                  <button type="submit" class="btn">Report</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

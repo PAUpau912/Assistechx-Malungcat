@@ -8,7 +8,17 @@ if(!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] == false){
 $user = $_SESSION['user'];
 require_once './src/Database.php';
 $db = Database::getInstance();
+
+require_once './src/ticket.php';
+$reportedCount = Ticket::countReportedTicketsByUser($user->id);
+// Count reported tickets
+$reportedTicketCount = Ticket::countReported();
+
+// Fetch only reported tickets
+$allTickets = Ticket::findByReported();  // Fetch only reported tickets
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,30 +29,21 @@ $db = Database::getInstance();
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-
   <title>Helpdesk - Dashboard</title>
-
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-
   <!-- Page level plugin CSS-->
   <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
-
   <!-- Custom styles for this template-->
   <link href="css/sb-admin.css" rel="stylesheet">
-
 </head>
 
 <body id="page-top">
-
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
-
     <a class="navbar-brand mr-1" href="dashboard.php">AssisTechX</a>
-
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
     </button>
-
     <!-- Navbar Search -->
     <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
       <div class="input-group">
@@ -54,10 +55,18 @@ $db = Database::getInstance();
         </div>
       </div>
     </form>
-
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto ml-md-0">
-      
+    <li class="nav-item dropdown no-arrow">
+    <a class="nav-link position-relative" href="reported_ticket.php" id="notificationBell" data-toggle="modal" data-target="#notificationModal">
+    <?php if ($reportedTicketCount > 0): ?>
+            <span class="badge badge-danger"><?php echo $reportedTicketCount; ?></span>
+        <?php endif; ?>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
+          </svg>
+        </a>
+      </li>
       <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-user-circle fa-fw"></i> <?php echo $user->name?>
@@ -72,7 +81,6 @@ $db = Database::getInstance();
   </nav>
 
   <div id="wrapper">
-
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
       <li class="nav-item active">
@@ -125,7 +133,6 @@ $db = Database::getInstance();
           <span> My tickets</span>
         </a>
       </li>
-
       <?php if($user->role == 'admin'): ?>
 
       <li class="nav-item active dropdown">
@@ -153,5 +160,60 @@ $db = Database::getInstance();
         </a>
       </li>
    <?php endif; ?>  
-    </ul>
+      <li class = "nav-item active">
+        <a class ="nav-link" href="general_terms.php">
+          <i></i>
+          <span>General Terms</span>
+        </a>
+      </li>
+    </ul>      
     
+    <!--LOGOUT-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-primary" href="./index.php">Logout</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal for Notifications -->
+<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="notificationModalLabel">Notifications</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <?php if ($reportedTicketCount > 0): ?>
+              <p>You have <?php echo $reportedTicketCount; ?> reported tickets that are waiting for action.</p>
+            <?php else: ?>
+              <p>You have no reported tickets currently waiting.</p>
+            <?php endif; ?>
+          </div>
+          <div class="modal-footer">
+          <a href="reported_ticket.php" class="btn btn-primary">View Reported Tickets</a> <!-- Button to go to reported_ticket.php -->
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+  </html>    

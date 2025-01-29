@@ -1,21 +1,29 @@
 <?php
-require_once './src/ticket.php';
+session_start();
+require_once './src/Database.php';
 
-if(isset($_GET['ticket_id']) && is_numeric($_GET['ticket_id'])){
-    $ticketId = (int)$_GET['ticket_id'];
+// Check if the ticket_id is set
+if (isset($_POST['ticket_id'])) {
+    $ticket_id = $_POST['ticket_id'];
+    $db = Database::getInstance();
 
-    try{
-        //update the reported field in the db
-        Ticket::updateReportedTicket($ticketId);
-
-        header("Location: admin.php?status=success&message=Ticket+reported+successfully");
-        exit;
-    }catch(Exception $e){
-        header("Location: admin.php?status=error&message= ".urlencode($e->getMessage()));
-        exit;
+    // Update the reported field to 1
+    $query = "UPDATE ticket SET reported = 1 WHERE id = ?";
+    $stmt = $db->prepare($query);
+    if ($stmt === false) {
+        die('Error preparing query: ' . $db->error);
     }
-}
-else{
-    header("Location: admin.php?status=error&message=Invalid+ticket+ID");
+
+    $stmt->bind_param("i", $ticket_id);
+
+    if ($stmt->execute()) {
+        // Redirect to admin.php after successful reporting
+        header("Location: admin.php");
+        exit();
+    } else {
+        echo "Error reporting ticket: " . $stmt->error;
+    }
+} else {
+    echo "No ticket ID provided.";
 }
 ?>

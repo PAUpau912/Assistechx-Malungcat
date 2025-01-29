@@ -88,7 +88,10 @@ function getStatusColor($status) {
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                                 <a class="dropdown-item" href="view.php">View</a>
-                                                <a class="dropdown-item" href="report_ticket.php?ticket_id=<?php echo $ticket->id; ?>">Report</a>
+                                                <form action="reported_ticket.php" method="POST">
+                                                    <input type="hidden" name="ticket_id" value="<?php echo $ticket->id; ?>">
+                                                    <button type="submit" class="btn">Report</button>
+                                                </form>
                                                 <a class="dropdown-item" onclick="return confirm('Are you sure to delete')"
                           href="?del=<?php echo $ticket->id; ?>">Delete</a>
                                             </div>

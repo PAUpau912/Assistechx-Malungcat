@@ -12,6 +12,18 @@
     if (isset($_GET['del'])) {
       $ticket::delete($_GET['del']);
     }
+
+    // Get Status Button Color Style
+function getStatusColor($status) {
+  $statusColors = [
+      'open' => 'background-color: blue ; color: white;',
+      'closed' => 'background-color: red; color: white;',
+      'solved' => 'background-color: green; color: white;',
+      'pending' => 'background-color: yellow; color: black;',
+  ];
+  
+  return $statusColors[$status] ?? 'background-color: #343a40; color: white;';  // Default black
+}
 ?>
 <div id="content-wrapper">
   <div class="container-fluid">
@@ -28,12 +40,13 @@
           <table class="table table-bordered table-sm" id="dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th style="width: 5%;">ID</th>
-              <th style="width: 20%;">Subject</th>
+              <th style="width: 8%;">ID</th>
+              <th style="width: 10%;">Subject</th>
               <th style="width: 15%;">Requester</th>
               <th style="width: 20%;">Team</th>
               <th style="width: 15%;">Agent</th>
-              <th style="width: 15%;">Created At</th>
+              <th style ="width: 15%">Status</th>
+              <th style="width: 20%;">Created At</th>
               <th style="width: 10%;">Action</th>
             </tr>
           </thead>
@@ -49,26 +62,35 @@
                     echo $requester ? $requester->name : 'Unknown'; 
                   ?>
                 </td>
-                <td><?php echo $team::find($ticket->team)->department;?></td>
+                <td>
+                  <?php 
+                    $teamData = $team::find($ticket->team);
+                    echo $teamData ? $teamData->department : 'Unknown Team';
+                  ?>
+                </td>
                 <td><?php echo $team::find($ticket->team_member)->name;?></td>
+                <td>
+                  <button class = "btn" style = "<?php echo getStatusColor($ticket->status);?>">
+                      <?php echo $ticket->status;?>
+                  </button>
+                </td>
                 <?php $date = new DateTime($ticket->created_at)?>
                 <td><?php echo $date->format('l, F j, Y g:i A')?> </td>
                 <td width="100px">
                   <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <div class="btn-group" role="group">
-                      <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Action
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <a href="./ticket-details.php?id=<?php echo $ticket->id?>" class="dropdown-item" href="#">View</a>
-                        <a class="dropdown-item" href="report_ticket.php?ticket_id=<?php echo $ticket->id; ?>">Report</a>
-                        <a class="dropdown-item" onclick="return confirm('Are you sure to delete')"
-                          href="?del=<?php echo $ticket->id; ?>">Delete</a>
+                      <div class="btn-group" role="group">
+                          <button id="btnGroupDrop1" type="button" class="btn btn-outline-primary dropdown-toggle"
+                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Action
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                              <a href="./ticket-details.php?id=<?php echo $ticket->id?>" class="dropdown-item">View</a>
+                              <a class="dropdown-item" onclick="return confirm('Are you sure to delete')"
+                                  href="?del=<?php echo $ticket->id; ?>">Delete</a>
+                          </div>
                       </div>
-                    </div>
                   </div>
-                </td>
+              </td>
               </tr>
               <?php endforeach?>
             </tbody>
@@ -85,6 +107,8 @@
     </div>
   </footer>
 </div>
+
+<!--LOGOUT-->
 <a class="scroll-to-top rounded" href="#page-top">
   <i class="fas fa-angle-up"></i>
 </a>
@@ -106,6 +130,9 @@
     </div>
   </div>
 </div>
+
+
+
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

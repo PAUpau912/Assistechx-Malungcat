@@ -7,6 +7,9 @@ if(!isset($_SESSION['logged-in']) || $_SESSION['logged-in'] == false){
 $user = $_SESSION['user'];
 require_once './src/Database.php';
 $db = Database::getInstance();
+
+require_once './src/feedback.php';
+$feedbackCount = Feedback::countFeedbackByUser($user->id); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,6 +68,19 @@ $db = Database::getInstance();
 
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto ml-md-0">
+    <li class="nav-item dropdown no-arrow">
+    <a class="nav-link dropdown-toggle position-relative" href="feedback_details.php" id="notificationDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
+          </svg>
+
+          <?php if ($feedbackCount >= 0): ?>
+            <span class="badge badge-danger position-absolute" style="top: 0; right: 0; font-size: 12px;">
+              <?php echo $feedbackCount; ?>
+            </span>
+          <?php endif; ?>
+        </a>
+      </li>
       
       <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -76,7 +92,8 @@ $db = Database::getInstance();
         </div>
       </li>
     </ul>
-
   </nav>
+
+  
 </body>
 </html>

@@ -56,7 +56,7 @@
                               </td>
                                 <td><?php echo $team::find($ticket->team)->department ?? ' ';?></td>
                                 <td><?php echo $team::find($ticket->team)->name ?? 'N/A ';  ?></td>
-                                <td><button class= "btn btn-danger"><?php echo $ticket->status ?></button></td>
+                                <td><button class= "btn btn-primary"><?php echo $ticket->status ?></button></td>
                                 <?php $date = new DateTime($ticket->created_at)?>
                                 <td><?php echo $date->format('l, F j, Y g:i A')?> </td>
                                 <td width="100px">
@@ -69,7 +69,10 @@
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                                 <a href="./ticket-details.php?id=<?php echo $ticket->id?>" class="dropdown-item" >View</a>
-                                                <a class="dropdown-item" href="report_ticket.php?ticket_id=<?php echo $ticket->id; ?>">Report</a>
+                                                <form action="report_ticket.php" method="POST">
+                                                  <input type="hidden" name="ticket_id" value="<?php echo $ticket->id; ?>">
+                                                  <button type="submit" class="btn">Report</button>
+                                                </form>
                                                 <a class="dropdown-item" onclick="return confirm('Are you sure to delete')"
                                                 href="?del=<?php echo $ticket->id; ?>">Delete</a>
                                             </div>
@@ -126,6 +129,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>

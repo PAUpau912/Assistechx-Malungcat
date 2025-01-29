@@ -119,8 +119,6 @@ class Ticket
         $self->populateObject($res->fetch_object());
         return $self;
     }
-    
-    
 
     public static function findAll(): array
     {
@@ -315,5 +313,110 @@ class Ticket
 
     return $members;
 }
+
+public static function countReportedTicketsByUser($userId) {
+    $db = Database::getInstance();
+    $stmt = $db->prepare("SELECT COUNT(*) AS count FROM ticket WHERE id = ? AND reported = 1");
+    if (!$stmt) {
+        die("Database error: " . $db->error); // Debugging message
+    }
+
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+    return $result['count'] ?? 0;
+}
+   // Method to count reported tickets
+   public static function countReported() {
+    $db = Database::getInstance();  // Assuming Database is your DB connection
+    $query = "SELECT COUNT(*) as total FROM ticket WHERE reported = 1";
+    $result = $db->query($query);
+      // Check if query was successful
+      if ($result === false) {
+        throw new Exception("Failed to execute query: " . $db->error);
+    }
+
+    $data = $result->fetch_assoc(); // Safe to call now
+    return $data['total'];
+}
+public static function findById($ticket_id) {
+    $db = Database::getInstance();
+
+    if (!$db) {
+        die("Database connection failed.");
+    }
+
+    // Use the correct table: `tickets`
+    $query = "SELECT * FROM ticket WHERE id = ?";
+    $stmt = $db->prepare($query);
+
+    if (!$stmt) {
+        die("SQL error: " . $db->error);
+    }
+
+    $stmt->bind_param("i", $ticket_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if (!$result) {
+        die("Execution error: " . $stmt->error);
+    }
+
+    return $result->fetch_object(); // Returns a single ticket object
+}
+
+public static function findByTicket($ticket_id) {
+    $db = Database::getInstance();
+
+    if (!$db) {
+        die("Database connection failed.");
+    }
+
+    // Fetch feedbacks related to the given ticket_id
+    $query = "SELECT * FROM feedback WHERE ticket_id = ?";
+    $stmt = $db->prepare($query);
+
+    if (!$stmt) {
+        die("SQL error: " . $db->error);
+    }
+
+    $stmt->bind_param("i", $ticket_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if (!$result) {
+        die("Execution error: " . $stmt->error);
+    }
+
+    return $result->fetch_all(MYSQLI_ASSOC); // Returns an array of feedbacks
+}
+public static function getReportedFeedbackByUser($userId) {
+    $db = Database::getInstance();
+    // Join feedback with ticket table to get subject, status, and created_at
+    $query = "
+        SELECT feedback.*, ticket.subject, ticket.status AS ticket_status, ticket.created_at AS ticket_created_at
+        FROM feedback
+        INNER JOIN ticket ON feedback.ticket_id = ticket.id
+        WHERE feedback.user_id = ? AND ticket.reported = 1
+    ";
+    $stmt = $db->prepare($query);
+    
+    if ($stmt === false) {
+        die('MySQL prepare error: ' . $db->error);
+    }
+
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $feedbacks = [];
+    
+    while ($row = $result->fetch_assoc()) {
+        $feedbacks[] = $row;  // Or create Feedback objects instead of raw data
+    }
+
+    return $feedbacks;
+}
+
+
 
 }
